@@ -1,14 +1,14 @@
 <script>
-  import LoginProviderButton from "./_components/LoginProviderButton.svelte";
+  import SignInProviderButton from "../_components/SignInProviderButton.svelte";
 </script>
 
 <div class="lg:grid lg:grid-cols-2 px-5 lg:px-0 justify-items-center h-screen">
   <div class=" justify-center h-full items-center flex flex-col w-full">
     <h1 class="font-bold text-4xl uppercase mb-10">Login</h1>
-    <LoginProviderButton text="Sign In With Google" provider="Google" />
-    <LoginProviderButton text="Sign In With Github" provider="GitHub" />
-    <LoginProviderButton text="Sign in Anonymously" provider="Anonymous" />
-    <LoginProviderButton text="Sign In With Email" provider="Email" />
+    <SignInProviderButton text="Sign In With Google" provider="Google" />
+    <SignInProviderButton text="Sign In With Github" provider="GitHub" />
+    <SignInProviderButton text="Sign in Anonymously" provider="Anonymous" />
+    <SignInProviderButton text="Sign In With Email" provider="Email" />
   </div>
 
   <div

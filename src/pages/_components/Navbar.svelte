@@ -33,7 +33,7 @@
         About
       </a>
       <a
-        href="/login"
+        href="/signin"
         class=" bg-primary font-semibold text-white rounded-md p-3 block mt-4 lg:inline-block lg:mt-0 "
       >
         Get Started
