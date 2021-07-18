@@ -1,14 +1,10 @@
 <script type="ts">
-  import { firebaseApp } from "../../firebaseConfig";
-
-  import { getAuth, onAuthStateChanged } from "firebase/auth";
+  import { userStore } from "../../stores/user";
 
   let isNavCollapsed = true;
+  let user = null;
 
-  let user: import("firebase/auth").User;
-  onAuthStateChanged(getAuth(firebaseApp), (auth) => {
-    user = auth;
-  });
+  userStore.subscribe((u) => (user = u));
 </script>
 
 <nav
