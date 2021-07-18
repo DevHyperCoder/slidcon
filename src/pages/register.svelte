@@ -1,3 +1,50 @@
+<script lang="ts">
+  let email: string = "",
+    password: string = "",
+    confirmPassword: string = "",
+    error = "";
+
+  let isRegisterButtonDisabled = false;
+
+  import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+  import { firebaseApp } from "../firebaseConfig";
+
+  $: {
+    confirmPassword;
+
+    console.log({ password, confirmPassword });
+    if (password !== confirmPassword) {
+      isRegisterButtonDisabled = true;
+      error = "Passwords do not match";
+    } else if (
+      !(password === "" && confirmPassword === "") &&
+      confirmPassword.length < 6
+    ) {
+      isRegisterButtonDisabled = true;
+      error = "Password should be more than 6 characters";
+    } else {
+      error = "";
+      isRegisterButtonDisabled = false;
+    }
+  }
+
+  $: {
+    console.log(error);
+  }
+
+  async function register() {
+    try {
+      await createUserWithEmailAndPassword(
+        getAuth(firebaseApp),
+        email,
+        password
+      );
+    } catch (e) {
+      console.error(e.message);
+    }
+  }
+</script>
+
 <div class="lg:grid lg:grid-cols-2 px-5 lg:px-0 justify-items-center h-screen">
   <div class=" justify-center h-full items-center flex flex-col w-full">
     <h1 class="font-bold text-4xl uppercase mb-10">Register</h1>
@@ -6,14 +53,17 @@
       <label class="mb-3 font-bold" for="email">Email</label>
       <input
         type="email"
+        on:invalid={() => (error = "Email address is not valid")}
         name="email"
+        bind:value={email}
         class="mb-4 border border-grey-500 rounded-xl"
         placeholder="Email"
       />
 
       <label class="mb-3 font-bold" for="password">Password</label>
       <input
-        type="email"
+        type="password"
+        bind:value={password}
         name="password"
         class="mb-4 border border-grey-500 rounded-xl"
         placeholder="Password"
@@ -23,13 +73,18 @@
         >Confirm Password</label
       >
       <input
-        type="email"
+        type="password"
+        bind:value={confirmPassword}
         name="confirm-password"
         class="mb-4 border border-grey-500 rounded-xl"
         placeholder="Confirm Password"
       />
 
-      <button class="bg-primary rounded-full p-2 text-white mb-3 font-bold"
+      <button
+        type="button"
+        on:click={register}
+        disabled={isRegisterButtonDisabled}
+        class={`bg-primary rounded-full p-2 text-white mb-3 font-bold disabled:bg-grey-500`}
         >Register</button
       >
 

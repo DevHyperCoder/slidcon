@@ -1,5 +1,14 @@
-<script>
+<script type="ts">
+  import { firebaseApp } from "../../firebaseConfig";
+
+  import { getAuth, onAuthStateChanged } from "firebase/auth";
+
   let isNavCollapsed = true;
+
+  let user: import("firebase/auth").User;
+  onAuthStateChanged(getAuth(firebaseApp), (auth) => {
+    user = auth;
+  });
 </script>
 
 <nav
@@ -32,11 +41,12 @@
       <a href="/about" class="block mt-4 lg:inline-block lg:mt-0 mr-4">
         About
       </a>
+
       <a
-        href="/signin"
+        href={user === null ? "/signin" : "/create"}
         class=" bg-primary font-semibold text-white rounded-md p-3 block mt-4 lg:inline-block lg:mt-0 "
       >
-        Get Started
+        {user === null ? "Get Started" : "Create"}
       </a>
     </div>
   </div>
