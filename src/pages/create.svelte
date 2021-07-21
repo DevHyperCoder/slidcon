@@ -1,5 +1,6 @@
 <script lang="ts">
-  import Navbar from "./_components/Navbar.svelte";
+    import Navbar from "./_components/Navbar.svelte";
+    import {goto} from "@roxi/routify"
   import Dropzone from "svelte-file-dropzone";
   import { getStorage, ref, StorageService, uploadBytes } from "firebase/storage";
   import {addDoc,getFirestore, collection , serverTimestamp} from "firebase/firestore"
@@ -16,9 +17,9 @@ import type { User } from "firebase/auth";
   };
 
 
-let user:User;
+    let user:User;
 
-userStore.subscribe(u=>user=u)
+    userStore.subscribe(u=>user=u)
 
   let uploadStatus = null;
 
@@ -72,9 +73,13 @@ userStore.subscribe(u=>user=u)
       console.error(e.message);
     }
   }
+
+
 </script>
 
 <Navbar />
+
+{#if user}
 <div class="w-full md:px-0 md:w-4/5 lg:w-3/5 mx-auto p-3 h-full ">
   <input
     class="w-min text-gray-800 mx-auto block mt-10 mb-10 font-bold outline-none border-b-2 text-2xl md:text-4xl text-center "
@@ -109,3 +114,7 @@ userStore.subscribe(u=>user=u)
     {/each}
   </ol>
 </div>
+
+{:else}
+    {$goto("/")}
+{/if}
