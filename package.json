@@ -17,8 +17,6 @@
     "dev:ssr": "run-p routify rollup",
     "build": "run-s build:*",
     "build:app": "routify -b && rollup -c",
-    "build:static": "spank",
-    "serve": "spassr --ssr",
     "rollup": "rollup -cw",
     "nollup": "nollup -c --verbose",
     "routify": "routify",
