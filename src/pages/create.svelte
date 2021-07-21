@@ -1,8 +1,12 @@
 <script lang="ts">
   import Navbar from "./_components/Navbar.svelte";
   import Dropzone from "svelte-file-dropzone";
-  import { getStorage, ref, uploadBytes } from "firebase/storage";
+  import { getStorage, ref, StorageService, uploadBytes } from "firebase/storage";
+  import {addDoc,getFirestore, collection , serverTimestamp} from "firebase/firestore"
   import { firebaseApp } from "../firebaseConfig";
+import type {CreateSlideshow} from "../types/Slideshow"
+import { userStore } from "../stores/user";
+import type { User } from "firebase/auth";
 
   let name = "Untitled Presentation";
 
@@ -10,6 +14,11 @@
     accepted: [],
     rejected: [],
   };
+
+
+let user:User;
+
+userStore.subscribe(u=>user=u)
 
   let uploadStatus = null;
 
@@ -19,7 +28,7 @@
     files.rejected = [...files.rejected, ...fileRejections];
   }
 
-  async function uploadToStorage() {
+  async function createSlideshow() {
     const { accepted } = files;
 
     if (accepted.length <= 0) {
@@ -28,12 +37,27 @@
       return;
     }
 
+    const createdDate = serverTimestamp()
+
+    const slideshow:CreateSlideshow = {
+        name,date:createdDate,
+        creator:user.uid
+        ,currentSlide:1,numSlides:accepted.length
+    }
+
+    const slideshowCollection = collection(getFirestore(),"slideshow");
+    const slideshowDoc = await addDoc(slideshowCollection,slideshow)
+
     const storage = getStorage(firebaseApp);
 
-    const slideshowId = "test";
+    const slideshowId =slideshowDoc.id
 
-    const promises = accepted.map((file, i) => {
-      const imgRef = ref(storage, `${slideshowId}/${i + 1}`);
+    await uploadToStorage(storage,accepted,slideshowId)
+  }
+
+  async function uploadToStorage(storage:StorageService,files:any[],id:string){
+    const promises = files.map((file, i) => {
+      const imgRef = ref(storage, `${id}/${i + 1}`);
       return uploadBytes(imgRef, file);
     });
 
@@ -74,7 +98,7 @@
 
   <div class="w-full flex justify-end">
     <button
-      on:click={uploadToStorage}
+      on:click={createSlideshow}
       class="bg-primary text-white p-2 rounded mt-8 text-lg ">Create</button
     >
   </div>
