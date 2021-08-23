@@ -8,7 +8,7 @@
 </script>
 
 <nav
-  class="shadow-lg sticky flex items-center justify-between flex-wrap bg-grey-500 p-4"
+  class="shadow-lg  flex items-center justify-between flex-wrap bg-grey-500 p-4"
 >
   <div class="flex items-center flex-shrink-0 text-white mr-6">
     <span class="text-black font-semibold text-xl tracking-tight">SlidCon</span>
